@@ -2,14 +2,31 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "../css/app.css";
+import WebsiteLayout from "./Layouts/Website";
+import NotFound from "./Pages/Error/NotFound";
+import AdminRoutes from "./Routers/Admin";
+import AuthRoutes from "./Routers/Auth";
+import DashboardRoutes from "./Routers/Dashboard";
+import WebsiteRoutes from "./Routers/Website";
 
 const router = createBrowserRouter([
     {
-        path: "/",
-        element: <div>Hello world!</div>,
+        path: "/admin",
+        element: <WebsiteLayout/>,
+        children: AdminRoutes,
     },{
-        path: "/kaas",
-        element: <div>kaas</div>,
+        path: "/auth",
+        element: <WebsiteLayout/>,
+        children: AuthRoutes,
+    },{
+        path: "/dashboard",
+        element: <WebsiteLayout/>,
+        children: DashboardRoutes,
+    },{
+        path: "/",
+        element: <WebsiteLayout/>,
+        children: WebsiteRoutes,
+        errorElement: <NotFound/>,
     },
 ]);
 
