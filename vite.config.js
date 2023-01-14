@@ -6,7 +6,8 @@ export default defineConfig({
     plugins: [
         laravel({
             input: [
-                "resources/css/app.css"
+                "resources/css/app.css",
+                "themes/**/js/app.{js,jsx,tsx,ts,vue}",
             ],
         }),
         {
