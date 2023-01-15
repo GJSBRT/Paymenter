@@ -1,9 +1,10 @@
 import React from "react";
+import Login from "../Pages/Auth/Login";
 
 const AuthRoutes = [
     {
-        path: "kaas",
-        element: <div>auth</div>,
+        path: "login",
+        element: <Login/>,
     },
 ]
 

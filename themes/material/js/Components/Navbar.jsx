@@ -1,86 +1,109 @@
 import * as React from 'react';
-import { AppBar, Box, Toolbar, Typography, Button, IconButton, Tooltip, Avatar, Menu, MenuItem } from '@mui/material';
-import MenuIcon from '@mui/icons-material/Menu';
+import { AppBar, Box, Toolbar, Typography, Button, IconButton, Tooltip, Avatar, Menu, MenuItem, Container } from '@mui/material';
+import { AdminPanelSettings, Person, Logout } from '@mui/icons-material';
+import { useGetUserQuery } from '../API';
+import { NavLink } from "react-router-dom";
+import axios from 'axios';
 
 export default function Navbar() {
+    const [ authenticated, setAuthenticated ] = React.useState(false);
     const pages = ['Home', 'About', 'Contact'];
-    const settings = ['Profile', 'Logout'];
 
-    const [anchorElNav, setAnchorElNav] = React.useState(null);
     const [anchorElUser, setAnchorElUser] = React.useState(null);
 
-    const handleOpenNavMenu = (event) => {
-        setAnchorElNav(event.currentTarget);
-    };
     const handleOpenUserMenu = (event) => {
         setAnchorElUser(event.currentTarget);
-    };
-
-    const handleCloseNavMenu = () => {
-        setAnchorElNav(null);
     };
 
     const handleCloseUserMenu = () => {
         setAnchorElUser(null);
     };
 
+    const { data: user, isError, isLoading } = useGetUserQuery();
+
+    React.useEffect(() => {
+        if (!isLoading) {
+            if (user === undefined) {
+                setAuthenticated(false);
+            } else {
+                setAuthenticated(true);
+            }
+        }
+    }, [ isLoading ]);
+
+    const logout = () => {
+        axios.post('/logout').then(() => {
+            window.location = '/';
+        });
+    };
+
     return (
         <Box sx={{ flexGrow: 1 }}>
             <AppBar position="static">
-                <Toolbar>
-                    <IconButton
-                        size="large"
-                        edge="start"
-                        color="inherit"
-                        aria-label="menu"
-                        sx={{ mr: 2 }}
-                    >
-                        <MenuIcon />
-                    </IconButton>
-                    <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                        LOGO
-                    </Typography>
-                    <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-                        {pages.map((page) => (
-                            <Button
-                                key={page}
-                                sx={{ my: 2, color: 'white', display: 'block' }}
-                            >
-                                {page}
-                            </Button>
-                        ))}
-                    </Box>
-
-                    <Box sx={{ flexGrow: 0 }}>
-                        <Tooltip title="Open settings">
-                            <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
-                            </IconButton>
-                        </Tooltip>
-                        <Menu
-                            sx={{ mt: '45px' }}
-                            id="menu-appbar"
-                            anchorEl={anchorElUser}
-                            anchorOrigin={{
-                                vertical: 'top',
-                                horizontal: 'right',
-                            }}
-                            keepMounted
-                            transformOrigin={{
-                                vertical: 'top',
-                                horizontal: 'right',
-                            }}
-                            open={Boolean(anchorElUser)}
-                            onClose={handleCloseUserMenu}
-                        >
-                            {settings.map((setting) => (
-                                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                                    <Typography textAlign="center">{setting}</Typography>
-                                </MenuItem>
+                <Container>
+                    <Toolbar>
+                        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                            LOGO
+                        </Typography>
+                        <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+                            {pages.map((page) => (
+                                <Button
+                                    key={page}
+                                    sx={{ my: 2, color: 'white', display: 'block' }}
+                                >
+                                    {page}
+                                </Button>
                             ))}
-                        </Menu>
-                    </Box>
-                </Toolbar>
+                        </Box>
+
+                        {!authenticated ? 
+                        <NavLink to='/auth/login'>
+                            <Button sx={{ my: 2, color: 'white', display: 'block' }}>
+                                Login
+                            </Button>
+                        </NavLink>
+                        :
+                        <Box sx={{ flexGrow: 0 }}>
+                            <Tooltip title="Open settings">
+                                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                                    <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                                </IconButton>
+                            </Tooltip>
+                            <Menu
+                                sx={{ mt: '45px' }}
+                                anchorEl={anchorElUser}
+                                anchorOrigin={{
+                                    vertical: 'top',
+                                    horizontal: 'right',
+                                }}
+                                keepMounted
+                                transformOrigin={{
+                                    vertical: 'top',
+                                    horizontal: 'right',
+                                }}
+                                open={Boolean(anchorElUser)}
+                                onClose={handleCloseUserMenu}
+                            >
+                                <NavLink to='/dashboard/account'>
+                                    <MenuItem onClick={handleCloseUserMenu}>
+                                        <Person/><Typography sx={{ ml: 1 }} textAlign="center">Account</Typography>
+                                    </MenuItem>
+                                </NavLink>
+                                
+                                <NavLink to='/admin'>
+                                    <MenuItem onClick={handleCloseUserMenu}>
+                                        <AdminPanelSettings/><Typography sx={{ ml: 1 }} textAlign="center">Admin</Typography>
+                                    </MenuItem>
+                                </NavLink>
+
+                                <MenuItem onClick={logout}>
+                                    <Logout sx={{ color: 'red' }}/><Typography sx={{ ml: 1, color: 'red' }} textAlign="center">Logout</Typography>
+                                </MenuItem>
+                            </Menu>
+                        </Box>
+                        }
+                    </Toolbar>
+                </Container>
             </AppBar>
         </Box>
     );

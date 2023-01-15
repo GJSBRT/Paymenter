@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Route;
 
 if (Routing::useLaravelRouting()) {
     Route::view('/{path?}', 'app')
-    ->where('path', '.*');
+    ->where('path', '^(?!(\/)?(api)).+');
 }
 
 Route::get('/', [App\Http\Controllers\BasisController::class, 'index'])->name('index');
