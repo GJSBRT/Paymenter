@@ -1,10 +1,11 @@
 import React from "react";
 import Login from "../Pages/Auth/Login";
+import Home from "../Pages/Website/Home";
 
 const WebsiteRoutes = [
     {
         path: "/",
-        element: <div>Hello world!</div>,
+        element: <Home/>,
     },{
         path: "login",
         element: <Login/>,

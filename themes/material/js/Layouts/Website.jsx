@@ -1,12 +1,12 @@
 import React from 'react';
 import { Outlet } from "react-router-dom";
 import { Container } from '@mui/material';
-import Navbar from '../Components/Navbar';
+import WebsiteNavbar from '../Components/WebsiteNavbar';
 
 export default function WebsiteLayout() {
     return (
         <>
-            <Navbar/>
+            <WebsiteNavbar/>
             <Container>
                 <Outlet />
             </Container>

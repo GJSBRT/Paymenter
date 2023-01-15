@@ -1,9 +1,10 @@
 import React from "react";
+import Dashboard from "../Pages/Dashboard/Dashboard";
 
 const DashboardRoutes = [
     {
-        path: "kaas",
-        element: <div>dashboard</div>,
+        path: "",
+        element: <Dashboard/>,
     },
 ]
 

@@ -11,6 +11,8 @@ import WebsiteRoutes from "./Routers/Website";
 import { configureStore, combineReducers } from '@reduxjs/toolkit';
 import { Provider } from 'react-redux';
 import { RestAPI } from "./API";
+import DashboardLayout from "./Layouts/Dashboard";
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 const router = createBrowserRouter([
     {
@@ -23,7 +25,7 @@ const router = createBrowserRouter([
         children: AuthRoutes,
     }, {
         path: "/dashboard",
-        element: <WebsiteLayout />,
+        element: <DashboardLayout />,
         children: DashboardRoutes,
     }, {
         path: "/",
@@ -45,10 +47,14 @@ const store = configureStore({
 // Get CSRF cookie
 store.dispatch(RestAPI.endpoints.getCSRFCookie.initiate());
 
+const mdTheme = createTheme()
+
 ReactDOM.createRoot(document.getElementById("root")).render(
     <React.StrictMode>
         <Provider store={store}>
-            <RouterProvider router={router} />
+            <ThemeProvider theme={mdTheme}>
+                <RouterProvider router={router} />
+            </ThemeProvider>
         </Provider>
     </React.StrictMode>
 );

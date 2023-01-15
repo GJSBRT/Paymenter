@@ -3,9 +3,9 @@
 use App\Classes\Routing;
 use Illuminate\Support\Facades\Route;
 
-if (Routing::useLaravelRouting()) {
+if (!Routing::useLaravelRouting()) {
     Route::view('/{path?}', 'app')
-    ->where('path', '^(?!(\/)?(api)).+');
+    ->where('path', '^(?!(\/)?(api|static|images)).+');
 }
 
 Route::get('/', [App\Http\Controllers\BasisController::class, 'index'])->name('index');
