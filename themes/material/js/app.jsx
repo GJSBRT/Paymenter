@@ -13,6 +13,7 @@ import { Provider } from 'react-redux';
 import { RestAPI } from "./API";
 import DashboardLayout from "./Layouts/Dashboard";
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import Home from "./Pages/Website/Home";
 
 const router = createBrowserRouter([
     {
@@ -27,6 +28,10 @@ const router = createBrowserRouter([
         path: "/dashboard",
         element: <DashboardLayout />,
         children: DashboardRoutes,
+    }, {
+        path: "/",
+        element: <Home />,
+        exact: true,
     }, {
         path: "/",
         element: <WebsiteLayout />,

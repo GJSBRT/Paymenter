@@ -2,7 +2,7 @@
 
 namespace App\Classes;
 
-use App\Models\Settings;
+use App\Models\Setting;
 
 class Routing {
 
@@ -10,7 +10,7 @@ class Routing {
     * Returns true if current theme wants to use Laravel's routing
     */
     public static function useLaravelRouting() {
-        $themeName = Settings::where('key', 'theme')->first()->value ?? 'default';
+        $themeName = Setting::where('key', 'theme')->first()->value ?? 'default';
         
         try {
             $themeData = file_get_contents(base_path() . "/themes/{$themeName}/theme.json");

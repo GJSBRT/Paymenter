@@ -1,3 +1,15 @@
+<?php
+
+use Illuminate\Support\Facades\Auth;
+
+$themeData = [
+    'logo' => config('settings::app_logo') ? asset(config('settings::app_logo')) : URL('/img/logo.png'),
+    'name' => config('settings::app_name') ?? 'Paymenter',
+    'user' => Auth::user()->toArray() ?? null,
+];
+
+?>
+
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
@@ -10,6 +22,9 @@
         <link rel="stylesheet" href="https://fonts.bunny.net/css2?family=Nunito:wght@400;600;700&display=swap">
 
         @vite(['themes/material/css/app.css', 'themes/material/js/app.jsx'])
+        <script>
+            window.ThemeData = {!! json_encode($themeData) !!};
+        </script>
     </head>
     <body class="font-sans antialiased">
         <div id="root"></div>

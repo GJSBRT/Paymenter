@@ -6,7 +6,6 @@ import MenuIcon from '@mui/icons-material/Menu';
 import { useGetUserQuery } from '../API';
 import { NavLink } from "react-router-dom";
 import axios from 'axios';
-import { useGetLogoQuery } from '../API/Website';
 
 export default function DashboardNavbar(props) {
     const [authenticated, setAuthenticated] = React.useState(false);
@@ -23,7 +22,6 @@ export default function DashboardNavbar(props) {
     };
 
     const { data: user, isError, isLoading } = useGetUserQuery();
-    const { data: logoData, isError: logoError, isLoading: logoLoading } = useGetLogoQuery();
 
     React.useEffect(() => {
         if (!isLoading) {

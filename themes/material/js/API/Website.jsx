@@ -1,17 +1,25 @@
 import { RestAPI } from "."
 
-const WebsitePrefix = "/api/website"
+const websitePrefix = "/api/website";
 const WebsiteAPI = RestAPI.injectEndpoints({
     endpoints: (builder) => ({
         getProducts: builder.query({
-            query: (req) => ({
-                url: `${WebsitePrefix}/v1/products`
+            query: () => ({
+                url: `${websitePrefix}/v1/products`
+            })
+        }),
+
+        /* Categories */
+        getCategories: builder.query({
+            query: () => ({
+                url: `${websitePrefix}/v1/categories`
             })
         }),
         
-        getLogo: builder.query({
-            query: (req) => ({
-                url: `${WebsitePrefix}/v1/theme/logo`
+        /* Annoucements */
+        getAnnouncements: builder.query({
+            query: () => ({
+                url: `${websitePrefix}/v1/announcements`
             })
         }),
     })
@@ -19,6 +27,6 @@ const WebsiteAPI = RestAPI.injectEndpoints({
 
 export const {
     useGetProductsQuery,
-
-    useGetLogoQuery,
+    useGetCategoriesQuery,
+    useGetAnnouncementsQuery
 } = WebsiteAPI
