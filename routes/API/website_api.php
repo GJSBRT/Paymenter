@@ -18,4 +18,5 @@ Route::group(['prefix' => 'v1/categories'], function () {
 // Annoucements
 Route::group(['prefix' => 'v1/announcements'], function () {
     Route::get('/', [AnnouncementController::class, 'getAnnouncements'])->name('api.website.v1.products.getAnnouncements');
+    Route::get('/{id}', [AnnouncementController::class, 'getAnnouncement'])->name('api.website.v1.products.getAnnouncement');
 });

@@ -19,4 +19,14 @@ class AnnouncementController extends Controller
             'announcements' => API::repaginate($announcements),
         ], 200);
     }
+    
+    /**
+     * Get a Announcement.
+     */
+    public function getAnnouncement(string $id)
+    {
+        return response()->json([
+            'announcement' => Announcement::findOrFail($id),
+        ], 200);
+    }
 }
