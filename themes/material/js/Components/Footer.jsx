@@ -2,7 +2,7 @@ import React from 'react';
 
 export default function () {
     return (
-        <footer class="bg-white dark:bg-gray-900 mt-48">
+        <footer class="bg-white dark:bg-gray-900 pt-48 mt-auto">
             <div class="mx-auto w-full max-w-screen-xl py-6 lg:py-8">
                 <div class="md:flex md:justify-between">
                     <div class="mb-6 md:mb-0">

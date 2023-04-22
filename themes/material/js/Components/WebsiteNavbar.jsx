@@ -32,7 +32,7 @@ export default function WebsiteNavbar() {
     return (
         <nav>
             <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto py-4">
-                <Link href="/" class="flex items-center">
+                <Link to="/" class="flex items-center">
                     <img src={window.ThemeData.logo} class="h-8 mr-3" alt="Logo" />
                     <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">{window.ThemeData.name}</span>
                 </Link>
