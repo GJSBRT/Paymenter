@@ -1,11 +1,10 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
 
-return new class extends Migration
-{
+return new class () extends Migration {
     /**
      * Run the migrations.
      *
@@ -19,38 +18,22 @@ return new class extends Migration
             $table->string('value')->nullable();
         });
         // migrate old settings
-        $settings = \App\Models\Settings::first();
+        $settings = \App\Models\Setting::first();
         $settings = $settings->toArray();
         foreach ($settings as $key => $value) {
-            if($key == 'created_at' || $key == 'updated_at' || $key == 'id' || $key == 'key' || $key == 'value') {
+            if ($key == 'created_at' || $key == 'updated_at' || $key == 'id' || $key == 'key' || $key == 'value') {
                 continue;
             }
-            \App\Models\Settings::create([
+            \App\Models\Setting::create([
                 'key' => $key,
-                'value' => $value
+                'value' => $value,
             ]);
         }
-        \App\Models\Settings::first()->delete();
+        \App\Models\Setting::first()->delete();
         // drop old settings
         Schema::table('settings', function (Blueprint $table) {
-            $table->dropColumn('advanced_mode');
-            $table->dropColumn('currency_sign');
-            $table->dropColumn('currency_position');
-            $table->dropColumn('home_page_text');
-            $table->dropColumn('app_name');
-            $table->dropColumn('sidebar');
-            $table->dropColumn('seo_title');
-            $table->dropColumn('seo_description');
-            $table->dropColumn('seo_keywords');
-            $table->dropColumn('seo_twitter_card');
-            $table->dropColumn('seo_image');
-            $table->dropColumn('maintenance');
-            $table->dropColumn('theme');
-            $table->dropColumn('recaptcha');
-            $table->dropColumn('recaptcha_site_key');
-            $table->dropColumn('recaptcha_secret_key');
+            $table->dropColumn(['advanced_mode', 'currency_sign', 'currency_position', 'home_page_text', 'app_name', 'sidebar', 'seo_title', 'seo_description', 'seo_keywords', 'seo_twitter_card', 'seo_image', 'maintenance', 'theme', 'recaptcha', 'recaptcha_site_key', 'recaptcha_secret_key']);
         });
-        
     }
 
     /**
@@ -79,17 +62,16 @@ return new class extends Migration
             $table->string('recaptcha_secret_key')->nullable();
         });
         // migrate old settings
-        $settings = \App\Models\Settings::all();
+        $settings = \App\Models\Setting::all();
         $settings = $settings->toArray();
         foreach ($settings as $key => $value) {
-            \App\Models\Settings::create([
-                $value['key'] => $value['value']
+            \App\Models\Setting::create([
+                $value['key'] => $value['value'],
             ]);
         }
         // drop old settings
         Schema::table('settings', function (Blueprint $table) {
-            $table->dropColumn('key');
-            $table->dropColumn('value');
+            $table->dropColumn(['key', 'value']);
         });
     }
 };

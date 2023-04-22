@@ -2,11 +2,11 @@
 
 namespace App\Providers;
 
-use Illuminate\Cache\RateLimiting\Limit;
-use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 
 class RouteServiceProvider extends ServiceProvider
 {
@@ -32,10 +32,14 @@ class RouteServiceProvider extends ServiceProvider
             Route::middleware('web')
                 ->group(base_path('routes/web.php'));
 
-            Route::middleware('web')
+            Route::middleware(['web', 'auth:sanctum', 'auth'])
                 ->prefix('api/client')
                 ->group(base_path('routes/API/client_api.php'));
-                
+
+            Route::middleware(['auth.admin.api', 'auth:sanctum'])
+                ->prefix('api/admin')
+                ->group(base_path('routes/API/admin_api.php'));
+
             Route::prefix('api/website')
                 ->group(base_path('routes/API/website_api.php'));
         });

@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Models\User;
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Socialite\Facades\Socialite;
-use App\Models\User;
 
 class SocialLoginController extends Controller
 {
@@ -14,8 +13,10 @@ class SocialLoginController extends Controller
     {
         if ($provider == 'discord') {
             return Socialite::driver($provider)->scopes(['email'])->redirect();
-        } else if ($provider == 'github') {
+        } elseif ($provider == 'github') {
             return Socialite::driver($provider)->scopes(['user:email'])->redirect();
+        } elseif ($provider == 'google') {
+            return Socialite::driver($provider)->scopes(['email'])->redirect();
         } else {
             return redirect()->route('login');
         }
@@ -25,14 +26,38 @@ class SocialLoginController extends Controller
     {
         if ($provider == 'discord') {
             $user = Socialite::driver($provider)->user();
+            if($user->user["verified"] == false) {
+                return redirect()->route('login')->with('error', 'Your Discord account is not verified.');
+            }
             $user = User::where('email', $user->email)->first();
             if (!$user) {
                 return redirect()->route('register')->with('error', 'You are not registered on this site.');
             } else {
                 Auth::login($user, true);
-                return redirect()->route('home');
+
+                return redirect()->route('index');
             }
-        }else {
+        } elseif ($provider == 'google') {
+            $user = Socialite::driver($provider)->user();
+            $user = User::where('email', $user->email)->first();
+            if (!$user) {
+                return redirect()->route('register')->with('error', 'You are not registered on this site.');
+            } else {
+                Auth::login($user, true);
+
+                return redirect()->route('index');
+            }
+        } elseif ($provider == 'github') {
+            $user = Socialite::driver($provider)->user();
+            $user = User::where('email', $user->email)->first();
+            if (!$user) {
+                return redirect()->route('register')->with('error', 'You are not registered on this site.');
+            } else {
+                Auth::login($user, true);
+
+                return redirect()->route('index');
+            }
+        } else {
             return redirect()->route('login');
         }
     }

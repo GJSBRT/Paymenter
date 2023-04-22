@@ -3,15 +3,16 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 
-class User extends Authenticatable implements MustVerifyEmail
+class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens;
+    use HasFactory;
+    use Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -31,7 +32,8 @@ class User extends Authenticatable implements MustVerifyEmail
         'phone',
         'companyname',
         'permissions',
-        'is_admin'
+        'is_admin',
+        'tfa_secret'
     ];
 
     /**
@@ -45,6 +47,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'is_admin',
         'permissions',
         'api_token',
+        'tfa_secret',
     ];
 
     /**
@@ -54,32 +57,37 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
-        'permissions' => 'array'
+        'permissions' => 'array',
     ];
 
     public function orders()
     {
-        return $this->hasMany(Orders::class, 'user', 'id');
+        return $this->hasMany(Order::class, 'client', 'id');
     }
 
     public function tickets()
     {
-        return $this->hasMany(Tickets::class, 'client', 'id');
-    }
-    
-    public function invoices()
-    {
-        return $this->hasMany(Invoices::class, 'user_id', 'id');
+        return $this->hasMany(Ticket::class, 'client', 'id');
     }
 
-    public function hasPermissionTo($permission)
+    public function invoices()
     {
-        if(!$this->is_admin) {
+        return $this->hasMany(Invoice::class, 'user_id', 'id');
+    }
+
+    public function has($permission)
+    {
+        if ($this->is_admin == 1 && $this->permissions == null) {
+            return true;
+        }
+        if ($this->permissions == null) {
             return false;
         }
+        // Check if array contains permission
         if (in_array($permission, $this->permissions)) {
             return true;
         }
-        return $this->permissions[$permission] ?? false;
+
+        return false;
     }
 }

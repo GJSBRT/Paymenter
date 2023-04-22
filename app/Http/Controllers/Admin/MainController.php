@@ -3,19 +3,18 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Models\Orders;
-use App\Models\Tickets;
+use App\Models\Invoice;
 
 class MainController extends Controller
 {
-    function __construct()
-    {   
-        $this->middleware('auth.admin');
-    }
-
-    function index()
+    public function index()
     {
-        return view('admin.index');
+        $revenueTotal = 0;
+        $invoices = Invoice::where('status', 'paid')->get();
+        foreach ($invoices as $invoice) {
+            $revenueTotal += $invoice->order()->get()->first()->total();
+        }
+
+        return view('admin.index', compact('revenueTotal'));
     }
 }

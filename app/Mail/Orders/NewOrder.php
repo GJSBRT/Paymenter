@@ -2,36 +2,35 @@
 
 namespace App\Mail\Orders;
 
+use App\Models\Order;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
-use Illuminate\Queue\SerializesModels;
-use App\Models\Orders;
 use Illuminate\Mail\Mailables\Content;
+use Illuminate\Queue\SerializesModels;
 
 class NewOrder extends Mailable
 {
-    use Queueable, SerializesModels;
+    use Queueable;
+    use SerializesModels;
 
     /**
      * The order instance.
      *
-     * @var \App\Models\Orders
+     * @var \App\Models\Order
      */
     protected $order;
-
 
     /**
      * Create a new message instance.
      *
-     * @param  \App\Models\Orders  $invoice
+     * @param \App\Models\Order $invoice
+     *
      * @return void
      */
-    public function __construct(Orders $order)
+    public function __construct(Order $order)
     {
         $this->order = $order;
     }
-
 
     /**
      * Get the message content definition.

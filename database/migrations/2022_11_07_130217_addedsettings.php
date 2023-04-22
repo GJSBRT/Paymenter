@@ -1,11 +1,10 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
 
-return new class extends Migration
-{
+return new class () extends Migration {
     /**
      * Run the migrations.
      *
@@ -13,7 +12,7 @@ return new class extends Migration
      */
     public function up()
     {
-        if(!Schema::hasColumn('settings', 'home_page_text')){
+        if (!Schema::hasColumn('settings', 'home_page_text')) {
             Schema::table('settings', function (Blueprint $table) {
                 $table->string('home_page_text')->nullable()->default('Welcome to Paymenter');
             });
@@ -34,11 +33,7 @@ return new class extends Migration
     public function down()
     {
         Schema::table('settings', function (Blueprint $table) {
-            $table->dropColumn('advanced_mode');
-            $table->dropColumn('currency_position');
-            $table->dropColumn('home_page_text');
-            $table->dropColumn('app_name');
-            $table->dropColumn('sidebar');
+            $table->dropColumn(['advanced_mode', 'currency_position', 'home_page_text', 'app_name', 'sidebar']);
         });
     }
 };

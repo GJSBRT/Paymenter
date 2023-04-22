@@ -9,8 +9,8 @@
             </div>
             <!-- App Logo -->
             <div class="relative m-4 group">
-                <input type="file" class="form-input peer @error('app_logo') is-invalid @enderror" placeholder=" "
-                    name="app_logo" accept="image/*" />
+                <input type="file" class="form-input p-0 peer @error('app_logo') is-invalid @enderror"
+                    placeholder=" " name="app_logo" accept="image/*" />
                 <label class="form-label">{{ __('Logo') }}</label>
             </div>
             <div class="relative m-4 group">
@@ -36,17 +36,56 @@
             <link rel="stylesheet" href="https://unpkg.com/easymde/dist/easymde.min.css">
             <script src="https://unpkg.com/easymde/dist/easymde.min.js"></script>
             <div class="relative m-4 group md:col-span-2 col-span-1">
-                <textarea name="home_page_text" class="form-input peer @error('home_page_text') is-invalid @enderror" placeholder=" "
-                    name="home_page_text" id="home_page_text"></textarea>
+                <label class="dark:text-darkmodetext block text-md font-medium text-gray-700">
+                    {{ __('Home Page Text') }}  
+                </label>
+                <textarea name="home_page_text" class="form-input w-full @error('home_page_text') is-invalid @enderror" placeholder=" "
+                    name="home_page_text" id="home_page_text">{{ config('settings::home_page_text') }}</textarea>
             </div>
             <script>
-                var easyMDE = new EasyMDE({
-                    element: document.getElementById("home_page_text"),
+                document.addEventListener("DOMContentLoaded", function() {
+                    var easyMDE = new EasyMDE({
+                        element: document.getElementById("home_page_text"),
+                        spellChecker: false,
+                toolbar: ["bold", "italic", "heading", "|", "quote", "unordered-list", "ordered-list", "|", "link", "image", "table", "|", "preview", "side-by-side", "fullscreen", "|", "guide"]
+                    });
                 });
-                easyMDE.value(`{{ config('settings::home_page_text') }}`);
             </script>
-
-            <h2 class="col-span-1 md:col-span-2 text-xl text-gray-900 dark:text-darkmodetext ">SEO: </h2>
+            <h2 class="col-span-1 md:col-span-2 text-xl text-gray-900 dark:text-darkmodetext ">{{ __('Currency') }}
+            </h2>
+            <div class="relative m-4 group">
+                <input type="text" class="form-input peer @error('currency_sign') is-invalid @enderror"
+                    placeholder=" " name="currency_sign" value="{{ config('settings::currency_sign') }}" />
+                <label class="form-label">{{ __('Currency Sign') }}</label>
+            </div>
+            <div class="relative m-4 group">
+                <input type="text" class="form-input peer @error('currency') is-invalid @enderror" placeholder=" "
+                    name="currency" value="{{ config('settings::currency') }}" />
+                <label class="form-label">{{ __('Currency Code') }}</label>
+            </div>
+            <h2 class="col-span-1 md:col-span-2 text-xl text-gray-900 dark:text-darkmodetext ">{{ __('Language') }}
+            </h2>
+            <div class="relative m-4 group">
+                <select class="form-input peer @error('language') is-invalid @enderror" placeholder=" "
+                    name="language" required>
+                    @foreach ($languages as $language)
+                        <option value="{{ $language }}" {{ $language == config('settings::language') ? 'selected' : '' }}>
+                            {{ $language }}</option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="relative m-4 group">
+                <input type="checkbox" class="form-input w-fit peer @error('allow_auto_lang') is-invalid @enderror"
+                    placeholder=" " name="allow_auto_lang" value="1" 
+                    {{ config('settings::allow_auto_lang') ? 'checked' : '' }} data-popover-target="discord"/>
+                <label class="form-label" style="position: unset;"  >{{ __('Allow Auto Language') }}</label>
+                <div id="discord" role="tooltip" data-popover
+                    class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+                    {{ __('If enabled, the language will be automatically set to the language of the browser.') }}
+                    <div data-popper-arrow></div>
+                </div>
+            </div>
+            <h2 class="col-span-1 md:col-span-2 text-xl text-gray-900 dark:text-darkmodetext ">{{ __('SEO') }}</h2>
             <div class="relative m-4 group">
                 <input type="text" class="form-input peer @error('seo_title') is-invalid @enderror" placeholder=" "
                     name="seo_title" required value="{{ config('settings::seo_title') }}" />
@@ -60,7 +99,7 @@
             </div>
             <div class="relative m-4 group">
                 <input type="text" class="form-input peer @error('seo_keywords') is-invalid @enderror"
-                    placeholder=" " name="seo_keywords" required value="{{ config('settings::seo_keywords') }}" />
+                    placeholder=" " name="seo_keywords" value="{{ config('settings::seo_keywords') }}" />
                 <label class="form-label">{{ __('Seo Keywords (separate with comma)') }}</label>
             </div>
             <div class="relative m-4 group">
@@ -71,7 +110,7 @@
             </div>
             <div class="relative m-4 group">
                 <select name="snow" class="form-input peer @error('snow') is-invalid @enderror" placeholder=" "
-                    name="snow" required>
+                    name="snow">
                     <option value="1" {{ config('settings::snow') == 1 ? 'selected' : '' }}>
                         {{ __('Enabled') }}</option>
                     <option value="0" {{ config('settings::snow') == 0 ? 'selected' : '' }}>

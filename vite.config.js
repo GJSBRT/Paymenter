@@ -10,17 +10,6 @@ export default defineConfig({
                 "themes/**/js/app.{js,jsx,tsx,ts,vue}",
             ],
         }),
-        {
-            name: "blade",
-            handleHotUpdate({ file, server }) {
-                if (file.endsWith(".blade.php")) {
-                    server.ws.send({
-                        type: "full-reload",
-                        path: "*",
-                    });
-                }
-            },
-        },
     ],
     css: {
         postcss: {

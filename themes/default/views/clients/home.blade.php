@@ -25,13 +25,14 @@
                     <img class="w-8 h-8 rounded-md" style="align-self: center; width: 2rem; height: 2rem;"
                         src="https://www.gravatar.com/avatar/{{ md5(Auth::user()->email) }}?s=200&d=mp" />
                     <div class="ml-4 text-lg font-semibold leading-7">
-                        Invoices
+                        {{ __('Invoices')}}
                     </div>
                 </div>
                 <div class="flex flex-col text-center items-center">
                     @foreach ($invoices as $invoice)
-                        <a href='{{ route("clients.invoice.show", $invoice->id) }}' class="text-blue-500 hover:text-blue-700">
-                            Invoice ID: {{$invoice->order()->get()->first()->id}}
+                        <a href='{{ route('clients.invoice.show', $invoice->id) }}'
+                            class="text-blue-500 hover:text-blue-700">
+                            {{ __('Invoice ID')}}: {{ $invoice->id }}
                         </a>
                         <hr class="w-1/2">
                         <br>
@@ -52,55 +53,56 @@
                     </thead>
                     <tbody class="w-full">
                         @if (count($services) > 0)
-
-                                @foreach ($services as $service)
-                                    @foreach ($service->products()->get() as $product)
-                                        @php
-                                            $product = App\Models\Products::where('id', $product->product_id)
-                                                ->get()
-                                                ->first();
-                                        @endphp
-                                        @if ($product)
-                                            <tr>
-                                                <td class="dark:text-white dark:bg-darkmode2 p-3">
-                                                    <strong>{{ ucfirst($product->name) }}</strong>
-                                                </td>
-                                                <td class="text-center dark:text-white dark:bg-darkmode2 p-3" data-order="0.00">
-                                                    @if ($product->price == 0)
-                                                        {{ __('Free') }}
-                                                    @else
-                                                        {{ config('settings::currency_sign') }}{{ number_format((float) $product->price . '', 2, '.', '') }}
-                                                    @endif
-                                                </td>
-                                                <td class="text-center dark:text-white dark:bg-darkmode2 p-3">
-                                                    {{ date('l jS F Y', strtotime($service->expiry_date)) }}</td>
-                                                <td class="text-center dark:text-white dark:bg-darkmode2 p-3">
-                                                    <div class="border border-gray-200">
-                                                        @if ($service->status === 'paid')
-                                                            <span
-                                                                class="label status status-active dark:bg-darkmode2 text-green-500">Active</span>
-                                                        @elseif($service->status === 'pending')
-                                                            <span
-                                                                class="label status status-active dark:bg-darkmode2 text-orange-400">Pending</span>
-                                                        @elseif($service->status === 'cancelled')
-                                                            <span
-                                                                class="label status status-active dark:bg-darkmode2 text-red-600">Expired</span>
-                                                        @endif
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        @else
-                                            <tr>
+                            @foreach ($services as $service)
+                                @foreach ($service->products()->get() as $product2)
+                                    @php
+                                        $product = $product2->product()->get()->first();
+                                    @endphp
+                                    @if ($product)
+                                        <tr>
                                             <td class="dark:text-white dark:bg-darkmode2 p-3">
-                                                    <strong>Something went wrong</strong>
-                                                </td>
-                                            </tr>
-                                        @endif
-                                    @endforeach
+                                                <strong>{{ ucfirst($product->name) }}</strong>
+                                            </td>
+                                            <td class="text-center dark:text-white dark:bg-darkmode2 p-3"
+                                                data-order="0.00">
+                                                {{ $product->price() ? config('settings::currency_sign') . $product->price() : __('Free') }}
+                                            </td>
+                                            <td class="text-center dark:text-white dark:bg-darkmode2 p-3">
+                                                {{ $product2->expiry_date ? date('l jS F Y', strtotime($product2->expiry_date)) : __('Never') }}
+                                            <td class="text-center dark:text-white dark:bg-darkmode2 p-3">
+                                                <div class="border border-gray-200">
+                                                    @if ($product2->status === 'paid')
+                                                        <span
+                                                            class="label status status-active dark:bg-darkmode2 text-green-500">{{ __('Active') }}</span>
+                                                    @elseif($product2->status === 'pending')
+                                                        <span
+                                                            class="label status status-active dark:bg-darkmode2 text-orange-400">{{ __('Pending') }}</span>
+                                                    @elseif($product2->status === 'cancelled')
+                                                        <span
+                                                            class="label status status-active dark:bg-darkmode2 text-red-600">{{ __('Expired') }}</span>
+                                                    @elseif($product2->status === 'suspended')
+                                                        <span
+                                                            class="label status status-active dark:bg-darkmode2 text-red-600">{{ __('Suspended') }}</span>
+                                                    @else
+                                                        <span
+                                                            class="label status status-active dark:bg-darkmode2 text-red-600">{{ $product2->status }}</span>
+                                                    @endif
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    @else
+                                        <tr>
+                                            <td class="dark:text-white dark:bg-darkmode2 p-3">
+                                                <strong>{{ __('Something went wrong') }}</strong>
+                                            </td>
+                                        </tr>
+                                    @endif
                                 @endforeach
+                            @endforeach
                         @elseif (count($services) <= 0)
                             <tr>
-                                <td colspan="4" class="dark:text-white dark:bg-darkmode2" style="text-align: center;">No services found.</td>
+                                <td colspan="4" class="dark:text-white dark:bg-darkmode2"
+                                    style="text-align: center;">{{ __('No services found.') }}</td>
                             </tr>
                         @endif
                     </tbody>

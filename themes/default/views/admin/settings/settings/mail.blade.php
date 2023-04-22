@@ -3,13 +3,19 @@
         @csrf
         <div class="grid grid-cols-1 md:grid-cols-2">
             <div class="relative m-4 group">
+                <input type="checkbox" class="w-fit form-input peer @error('mail_encryption') is-invalid @enderror"
+                    placeholder=" " name="mail_disabled" value="1"
+                    {{ config('settings::mail_disabled') == 1 ? 'checked' : '' }} />
+                <label class="form-label" style="position: unset">{{ __('Disable all mails') }}</label>
+            </div>
+            <div class="relative m-4 group">
                 <input type="text" class="form-input peer @error('mail_username') is-invalid @enderror" placeholder=" "
                     name="mail_username" value="{{ config('mail.username') }}" />
                 <label class="form-label">{{ __('Mail Username') }}</label>
             </div>
             <div class="relative m-4 group">
-                <input type="text" class="form-input peer @error('mail_password') is-invalid @enderror"
-                    placeholder=" " name="mail_password" />
+                <input type="password" class="form-input peer @error('mail_password') is-invalid @enderror" 
+                    placeholder=" " name="mail_password" value="{{ config('mail.password') }}" />
                 <label class="form-label">{{ __('Mail Password') }}</label>
             </div>
             <div class="relative m-4 group">
@@ -33,10 +39,12 @@
                 <label class="form-label">{{ __('Mail From Name') }}</label>
             </div>
             <div class="relative m-4 group">
-                <input type="checkbox" class="w-fit form-input peer @error('mail_encryption') is-invalid @enderror"
-                    placeholder=" " name="mail_encryption" value="1"
-                    {{ config('mail.encryption') == 1 ? 'checked' : '' }} />
-                <label class="form-label" style="position: unset">{{ __('Mail Encryption(ssl)') }}</label>
+                <select class="form-input peer @error('mail_encryption') is-invalid @enderror" name="mail_encryption">
+                    <option value="tls" {{ config('mail.encryption') == 'tls' ? 'selected' : '' }}>TLS</option>
+                    <option value="ssl" {{ config('mail.encryption') == 'ssl' ? 'selected' : '' }}>SSL</option>
+                    <option value="none" {{ config('mail.encryption') == '' ? 'selected' : '' }}>None</option>
+                </select>
+                <label class="form-label">{{ __('Mail Encryption') }}</label>
             </div>
         </div>
         <div class="float-right">
@@ -64,13 +72,14 @@
                         if (data.success) {
                             Swal.fire('Email send succesfully!')
                         } else {
-                            Swal.fire('Something went wrong!\n' + data.message);
+                            Swal.fire('Something went wrong!\n' + data.error);
                         }
                         $('#test').attr('disabled', false)
                         $('#test').html('Test')
                     }
                 }).catch(function(error) {
-                    Swal.fire('Something went wrong!\n' + error);
+                    console.log(error)
+                    Swal.fire('Something went wrong!\n\n' + error.responseJSON.error);
                     $('#test').attr('disabled', false)
                     $('#test').html('Test')
                 });
