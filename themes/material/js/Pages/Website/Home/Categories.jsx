@@ -18,6 +18,8 @@ export default function() {
                 :
                     <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'>
                         {data.categories.data.map((category, index) => {
+                            if (index > 2) return;
+
                             return (
                                 <div key={index} class="max-w-sm">
                                     <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{category.name}</h5>

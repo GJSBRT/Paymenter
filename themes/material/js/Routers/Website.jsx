@@ -1,11 +1,11 @@
 import React from "react";
 import Login from "../Pages/Auth/Login";
-import Home from "../Pages/Website/Home";
+import Categories from "../Pages/Website/Categories";
 
 const WebsiteRoutes = [
     {
-        path: "/",
-        element: <Home/>,
+        path: "categories",
+        element: <Categories/>,
     },{
         path: "login",
         element: <Login/>,

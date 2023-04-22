@@ -1,34 +1,8 @@
 import * as React from 'react';
-import { useGetUserQuery } from '../API';
 import { Link } from "react-router-dom";
-import axios from 'axios';
 import Button from './Button';
 
 export default function WebsiteNavbar() {
-    const [authenticated, setAuthenticated] = React.useState(false);
-    const [anchorElUser, setAnchorElUser] = React.useState(null);
-    const { data: user, isError, isLoading } = useGetUserQuery();
-
-    const handleOpenUserMenu = (event) => {
-        setAnchorElUser(event.currentTarget);
-    };
-
-    const handleCloseUserMenu = () => {
-        setAnchorElUser(null);
-    };
-
-    React.useEffect(() => {
-        if (!isLoading) {
-            setAuthenticated(user || !isError);
-        }
-    }, [isLoading]);
-
-    const logout = () => {
-        axios.post('/logout').then(() => {
-            window.location = '/';
-        });
-    };
-
     return (
         <nav>
             <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto py-4">
@@ -45,10 +19,10 @@ export default function WebsiteNavbar() {
                 <div class="hidden w-full md:block md:w-auto" id="navbar-default">
                     <ul class="font-medium flex flex-col p-4 md:p-0 mt-4 md:flex-row md:space-x-8 md:mt-0">
                         <li>
-                            <a href="#" class="block py-2 pl-3 pr-4 text-white bg-indigo-700 rounded md:bg-transparent md:text-indigo-700 md:p-0 dark:text-white md:dark:text-indigo-500" aria-current="page">Home</a>
+                            <Link to="/" class="block py-2 pl-3 pr-4 text-white bg-indigo-700 rounded md:bg-transparent md:text-indigo-700 md:p-0 dark:text-white md:dark:text-indigo-500" aria-current="page">Home</Link>
                         </li>
                         <li>
-                            <a href="#" class="block py-2 pl-3 pr-4 text-gray-900 rounded md:hover:bg-transparent md:border-0 md:hover:text-indigo-700 md:p-0 dark:text-white md:dark:hover:text-indigo-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">Categories</a>
+                            <Link to="/categories" class="block py-2 pl-3 pr-4 text-gray-900 rounded md:hover:bg-transparent md:border-0 md:hover:text-indigo-700 md:p-0 dark:text-white md:dark:hover:text-indigo-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">Categories</Link>
                         </li>
                         <li>
                             <a href="#" class="block py-2 pl-3 pr-4 text-gray-900 rounded md:hover:bg-transparent md:border-0 md:hover:text-indigo-700 md:p-0 dark:text-white md:dark:hover:text-indigo-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">Annoucements</a>

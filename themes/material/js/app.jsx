@@ -36,6 +36,7 @@ const router = createBrowserRouter([
         path: "/",
         element: <WebsiteLayout />,
         children: WebsiteRoutes,
+        exact: false,
         errorElement: <NotFound />,
     },
 ]);
