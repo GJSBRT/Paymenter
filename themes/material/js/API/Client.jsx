@@ -8,9 +8,15 @@ const ClientAPI = RestAPI.injectEndpoints({
                 url: `${ClientPrefix}/v1/tickets`
             })
         }),
+        getTicket: builder.query({
+            query: (id) => ({
+                url: `${ClientPrefix}/v1/tickets/${id}`
+            })
+        }),
     })
 })
 
 export const {
     useGetTicketsQuery,
+    useGetTicketQuery,
 } = ClientAPI

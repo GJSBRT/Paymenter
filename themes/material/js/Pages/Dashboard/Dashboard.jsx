@@ -77,6 +77,7 @@ export default function Dashboard() {
                                     :
                                     tickets.tickets.data.map((ticket, index) => (
                                         <TableRow
+                                            hover
                                             key={index}
                                             sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                                         >

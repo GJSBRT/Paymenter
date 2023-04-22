@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, Typography, Button, TextField, Grid, Link } from '@mui/material';
 import { Formik } from 'formik';
-import { useGetUserQuery, useLoginUserMutation } from '../../API';
+import { useLoginUserMutation } from '../../API';
 import { useNavigate } from "react-router-dom";
 
 export default function Login() {
